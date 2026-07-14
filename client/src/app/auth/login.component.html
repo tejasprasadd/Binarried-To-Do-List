@@ -1,0 +1,57 @@
+<main class="grid min-h-dvh bg-canvas p-4 sm:p-8 lg:grid-cols-[minmax(17rem,0.82fr)_minmax(25rem,0.7fr)] lg:gap-8 lg:p-10">
+  <section class="relative hidden overflow-hidden rounded-[2rem] bg-ink p-10 text-white lg:flex lg:flex-col lg:justify-between">
+    <div class="absolute -right-14 top-12 h-56 w-56 rounded-full bg-lilac opacity-95"></div>
+    <a routerLink="/login" class="relative font-mono text-sm tracking-[0.18em] text-mint">BINARIED / DAILY WORK</a>
+    <div class="relative max-w-sm">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-white/60">Your task daybook</p>
+      <h1 class="mt-5 text-5xl font-black leading-[0.94] tracking-[-0.055em]">Make the next thing obvious.</h1>
+      <p class="mt-6 max-w-xs text-base leading-7 text-white/75">Keep work in a small, visible list. Add a due date, choose its state, and move on.</p>
+    </div>
+    <p class="relative font-mono text-xs text-white/55">ONE DEMO ACCOUNT · NO SIGN-UP</p>
+  </section>
+
+  <section class="relative mx-auto flex w-full max-w-md items-center py-8 lg:max-w-none lg:px-[clamp(2rem,8vw,8rem)]">
+    <div class="w-full rounded-[2rem] bg-surface p-7 shadow-[0_20px_60px_rgba(32,35,63,0.10)] sm:p-10">
+      <div class="mb-10 flex items-start justify-between">
+        <div>
+          <p class="font-mono text-xs uppercase tracking-[0.16em] text-muted">Welcome back</p>
+          <h1 class="mt-2 text-3xl font-black tracking-[-0.045em] text-ink">Sign in to your list</h1>
+        </div>
+        <span class="grid h-10 w-10 place-items-center rounded-2xl bg-lilac font-mono text-sm font-bold text-lilac-strong" aria-hidden="true">B.</span>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="space-y-5">
+        <div>
+          <label for="username" class="mb-2 block text-sm font-bold text-ink">Username</label>
+          <input id="username" type="text" autocomplete="username" formControlName="username" [attr.aria-invalid]="form.controls.username.invalid && form.controls.username.touched" class="w-full rounded-xl border border-line bg-white px-4 py-3 text-ink outline-none transition focus:border-lilac-strong" />
+          @if (form.controls.username.invalid && form.controls.username.touched) {
+            <p class="mt-2 text-sm text-red-700">Enter your username.</p>
+          }
+        </div>
+
+        <div>
+          <label for="password" class="mb-2 block text-sm font-bold text-ink">Password</label>
+          <input id="password" type="password" autocomplete="current-password" formControlName="password" [attr.aria-invalid]="form.controls.password.invalid && form.controls.password.touched" class="w-full rounded-xl border border-line bg-white px-4 py-3 text-ink outline-none transition focus:border-lilac-strong" />
+          @if (form.controls.password.invalid && form.controls.password.touched) {
+            <p class="mt-2 text-sm text-red-700">Enter your password.</p>
+          }
+        </div>
+
+        @if (errorMessage()) {
+          <p class="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-800" role="alert">{{ errorMessage() }}</p>
+        }
+
+        <button type="submit" [disabled]="isSubmitting()" class="w-full rounded-xl bg-ink px-4 py-3 font-bold text-white transition hover:bg-lilac-strong disabled:cursor-wait disabled:opacity-60">
+          {{ isSubmitting() ? 'Signing in…' : 'Sign in' }}
+        </button>
+      </form>
+
+      <aside class="mt-7 rounded-xl bg-mint/45 p-4 text-sm text-ink" aria-label="Demo account details">
+        <p class="font-bold">Demo access</p>
+        <p class="mt-1 font-mono text-xs">admin / admin123</p>
+      </aside>
+
+      <p class="mt-7 text-center text-sm text-muted">Need a different account? <a routerLink="/register" class="font-bold text-lilac-strong underline decoration-2 underline-offset-4">About registration</a></p>
+    </div>
+  </section>
+</main>
