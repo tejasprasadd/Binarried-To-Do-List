@@ -5,11 +5,11 @@
   "packageManager": "bun@1.2.0",
   "workspaces": ["client", "server"],
   "scripts": {
-    "dev": "bun --filter server run dev & bun --filter client run start",
-    "dev:client": "bun --filter client run start",
-    "dev:server": "bun --filter server run dev",
-    "build": "bun --filter client run build",
-    "test": "bun --filter server run test && bun --filter client run test",
-    "typecheck": "bun --filter server run typecheck && bun --filter client run typecheck"
+    "dev": "bun run dev:server & bun run dev:client",
+    "dev:client": "bun run --cwd client dev",
+    "dev:server": "bun run --cwd server dev",
+    "build": "bun run --cwd client build",
+    "test": "bun run --cwd server test && bun run --cwd client test",
+    "typecheck": "bun run --cwd server typecheck && bun run --cwd client typecheck"
   }
 }

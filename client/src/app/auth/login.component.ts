@@ -3,6 +3,7 @@ import { ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { readApiError } from '../core/api/api-error.model';
+import { ToastService } from '../shared/toast/toast.service';
 import { AuthService } from './auth.service';
 
 @Component({
@@ -14,6 +15,7 @@ import { AuthService } from './auth.service';
 export class LoginComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly auth = inject(AuthService);
+  private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
@@ -36,11 +38,14 @@ export class LoginComponent {
 
     this.auth.login({ username, password }).subscribe({
       next: () => {
+        this.toast.success('Signed in as admin.');
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
         void this.router.navigateByUrl(returnUrl?.startsWith('/') ? returnUrl : '/tasks');
       },
       error: (error: unknown) => {
-        this.errorMessage.set(readApiError(error).message ?? 'Sign in could not be completed. Try again.');
+        const message = readApiError(error).message ?? 'Sign in could not be completed. Try again.';
+        this.errorMessage.set(message);
+        this.toast.error(message);
         this.isSubmitting.set(false);
       },
     });

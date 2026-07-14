@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import '@angular/cdk/overlay-prebuilt.css';
 
 @theme {
   --color-canvas: #f7f7fc;

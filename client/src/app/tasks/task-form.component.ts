@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { readApiError } from '../core/api/api-error.model';
+import { ToastService } from '../shared/toast/toast.service';
 import { TaskInput } from './task.model';
 import { TaskService } from './task.service';
 
@@ -16,6 +17,7 @@ import { TaskService } from './task.service';
 export class TaskFormComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly taskService = inject(TaskService);
+  private readonly toast = inject(ToastService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
@@ -64,6 +66,7 @@ export class TaskFormComponent {
     request.subscribe({
       next: () => {
         this.form.markAsPristine();
+        this.toast.success(this.isEditing() ? 'Task changes saved.' : 'Task added.');
         void this.router.navigate(['/tasks']);
       },
       error: (error: unknown) => {
@@ -75,14 +78,20 @@ export class TaskFormComponent {
             control?.setErrors({ ...control.errors, server: message });
           }
         }
-        this.errorMessage.set(apiError.message ?? 'The task could not be saved. Try again.');
+        const message = apiError.message ?? 'The task could not be saved. Try again.';
+        this.errorMessage.set(message);
         this.isSaving.set(false);
+        this.toast.error(message);
       },
     });
   }
 
   protected cancel(): void {
+    const hadUnsavedChanges = this.form.dirty;
     if (this.canDeactivate()) {
+      if (hadUnsavedChanges) {
+        this.toast.info('Task changes discarded.');
+      }
       void this.router.navigate(['/tasks']);
     }
   }
