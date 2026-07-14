@@ -2,12 +2,12 @@ import mongoose from 'mongoose';
 
 import { env } from './env';
 
-export async function connectDatabase(): Promise<void> {
+export async function connectDatabase(uri = env.mongoUri): Promise<void> {
   if (mongoose.connection.readyState !== 0) {
     return;
   }
 
-  await mongoose.connect(env.mongoUri);
+  await mongoose.connect(uri);
   console.log('Connected to MongoDB.');
 }
 

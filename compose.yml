@@ -7,6 +7,8 @@ services:
       - "27017:27017"
     environment:
       MONGO_INITDB_DATABASE: binaried
+      # Required by MongoDB's TCMalloc on Linux kernel 6.19+.
+      GLIBC_TUNABLES: glibc.pthread.rseq=1
     volumes:
       - mongo-data:/data/db
     healthcheck:
