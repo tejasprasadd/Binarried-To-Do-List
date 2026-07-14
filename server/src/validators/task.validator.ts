@@ -1,18 +1,8 @@
 import { TASK_STATUSES, type TaskStatus } from '../constants/task.constants';
 import { HttpError } from '../middleware/http-error';
+import type { TaskCreateInput, TaskListQuery, TaskUpdateInput } from '../types/task.types';
 
-type TaskInput = {
-  title?: string;
-  description?: string | undefined;
-  status?: TaskStatus;
-  dueDate?: Date;
-};
-
-export type TaskListQuery = {
-  status?: TaskStatus;
-  sort: 'dueDate' | 'createdAt' | 'status';
-  direction: 'asc' | 'desc';
-};
+type ParsedTaskInput = TaskUpdateInput;
 
 function asRecord(value: unknown): Record<string, unknown> {
   if (value === null || typeof value !== 'object' || Array.isArray(value)) {
@@ -42,9 +32,9 @@ function parseDate(value: unknown, details: Record<string, string>): Date | unde
   return date;
 }
 
-function parseFields(body: Record<string, unknown>, partial: boolean): TaskInput {
+function parseFields(body: Record<string, unknown>, partial: boolean): ParsedTaskInput {
   const details: Record<string, string> = {};
-  const task: TaskInput = {};
+  const task: ParsedTaskInput = {};
 
   if ('title' in body || !partial) {
     if (typeof body.title !== 'string') {
@@ -98,13 +88,13 @@ function parseFields(body: Record<string, unknown>, partial: boolean): TaskInput
   return task;
 }
 
-export function validateNewTask(value: unknown): Required<Pick<TaskInput, 'title' | 'status' | 'dueDate'>> & TaskInput {
+export function validateNewTask(value: unknown): TaskCreateInput {
   const body = asRecord(value);
   const task = parseFields(body, false);
-  return { ...task, status: task.status ?? 'todo' } as Required<Pick<TaskInput, 'title' | 'status' | 'dueDate'>> & TaskInput;
+  return { ...task, status: task.status ?? 'todo' } as TaskCreateInput;
 }
 
-export function validateTaskUpdate(value: unknown): TaskInput {
+export function validateTaskUpdate(value: unknown): TaskUpdateInput {
   return parseFields(asRecord(value), true);
 }
 

@@ -1,15 +1,5 @@
-# server
+# Binaried server
 
-To install dependencies:
+Express and MongoDB API for Binaried. Copy `.env.example` to `.env`, ensure MongoDB is running through Compose, then run `bun run dev` from this directory or `bun run dev:server` from the repository root.
 
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.3.14. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+Run the API integration tests with `bun run test`; they use a dedicated test database. See the [root README](../README.md) for complete setup and endpoint details.

@@ -1,13 +1,16 @@
 import type { RequestHandler } from 'express';
 
+import { DEMO_CREDENTIALS, DEMO_USER } from '../constants/task.constants';
 import { HttpError } from '../middleware/http-error';
+import type { LoginRequest, LoginResponse } from '../types/auth.types';
 
 export const login: RequestHandler = (request, response) => {
-  const { username, password } = request.body as Record<string, unknown>;
+  const body = (request.body ?? {}) as LoginRequest;
 
-  if (username !== 'admin' || password !== 'admin123') {
+  if (body.username !== DEMO_CREDENTIALS.username || body.password !== DEMO_CREDENTIALS.password) {
     throw new HttpError(401, 'Invalid username or password.');
   }
 
-  response.status(200).json({ isLoggedIn: true, username: 'admin' });
+  const responseBody: LoginResponse = { isLoggedIn: true, username: DEMO_USER.username };
+  response.status(200).json(responseBody);
 };

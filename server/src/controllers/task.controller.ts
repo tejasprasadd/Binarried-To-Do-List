@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express';
 
-import { TaskModel, type TaskDocument } from '../models/task.model';
 import { HttpError } from '../middleware/http-error';
+import * as taskService from '../services/task.service';
 import { validateNewTask, validateTaskListQuery, validateTaskUpdate } from '../validators/task.validator';
 
 function requireOwnerId(request: Parameters<RequestHandler>[0]): string {
@@ -10,12 +10,6 @@ function requireOwnerId(request: Parameters<RequestHandler>[0]): string {
   }
 
   return request.demoUser.id;
-}
-
-function assertTaskId(id: string): void {
-  if (!/^[a-f\d]{24}$/i.test(id)) {
-    throw new HttpError(404, 'Task not found.');
-  }
 }
 
 function taskIdFromRequest(request: Parameters<RequestHandler>[0]): string {
@@ -27,60 +21,37 @@ function taskIdFromRequest(request: Parameters<RequestHandler>[0]): string {
   return id;
 }
 
-function serializeTask(task: TaskDocument) {
-  return {
-    id: task.id,
-    title: task.title,
-    description: task.description ?? '',
-    status: task.status,
-    dueDate: task.dueDate.toISOString().slice(0, 10),
-    createdAt: task.createdAt.toISOString(),
-  };
-}
-
-async function findOwnedTask(id: string, ownerId: string): Promise<TaskDocument> {
-  assertTaskId(id);
-  const task = await TaskModel.findOne({ _id: id, ownerId });
-  if (!task) {
-    throw new HttpError(404, 'Task not found.');
-  }
-
-  return task;
-}
-
 export const listTasks: RequestHandler = async (request, response) => {
   const ownerId = requireOwnerId(request);
-  const { status, sort, direction } = validateTaskListQuery(request.query);
-  const filter = status ? { ownerId, status } : { ownerId };
-  const tasks = await TaskModel.find(filter).sort({ [sort]: direction === 'asc' ? 1 : -1 });
+  const tasks = await taskService.listTasks(ownerId, validateTaskListQuery(request.query));
 
-  response.status(200).json({ tasks: tasks.map(serializeTask) });
+  response.status(200).json({ tasks });
 };
 
 export const createTask: RequestHandler = async (request, response) => {
   const ownerId = requireOwnerId(request);
-  const input = validateNewTask(request.body);
-  const task = await TaskModel.create({ ...input, ownerId });
+  const task = await taskService.createTask(ownerId, validateNewTask(request.body));
 
-  response.status(201).json({ task: serializeTask(task) });
+  response.status(201).json({ task });
 };
 
 export const getTask: RequestHandler = async (request, response) => {
-  const task = await findOwnedTask(taskIdFromRequest(request), requireOwnerId(request));
-  response.status(200).json({ task: serializeTask(task) });
+  const task = await taskService.getTask(requireOwnerId(request), taskIdFromRequest(request));
+  response.status(200).json({ task });
 };
 
 export const updateTask: RequestHandler = async (request, response) => {
-  const task = await findOwnedTask(taskIdFromRequest(request), requireOwnerId(request));
-  task.set(validateTaskUpdate(request.body));
-  await task.save();
+  const task = await taskService.updateTask(
+    requireOwnerId(request),
+    taskIdFromRequest(request),
+    validateTaskUpdate(request.body),
+  );
 
-  response.status(200).json({ task: serializeTask(task) });
+  response.status(200).json({ task });
 };
 
 export const deleteTask: RequestHandler = async (request, response) => {
-  const task = await findOwnedTask(taskIdFromRequest(request), requireOwnerId(request));
-  await task.deleteOne();
+  await taskService.deleteTask(requireOwnerId(request), taskIdFromRequest(request));
 
   response.sendStatus(204);
 };

@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+import { readApiError } from '../core/api/api-error.model';
 import { TaskInput } from './task.model';
 import { TaskService } from './task.service';
 
@@ -65,15 +66,16 @@ export class TaskFormComponent {
         this.form.markAsPristine();
         void this.router.navigate(['/tasks']);
       },
-      error: (error: { error?: { message?: string; details?: Record<string, string> } }) => {
-        const details = error.error?.details;
+      error: (error: unknown) => {
+        const apiError = readApiError(error);
+        const details = apiError.details;
         if (details) {
           for (const [name, message] of Object.entries(details)) {
             const control = this.form.get(name);
             control?.setErrors({ ...control.errors, server: message });
           }
         }
-        this.errorMessage.set(error.error?.message ?? 'The task could not be saved. Try again.');
+        this.errorMessage.set(apiError.message ?? 'The task could not be saved. Try again.');
         this.isSaving.set(false);
       },
     });

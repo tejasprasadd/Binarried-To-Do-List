@@ -18,3 +18,11 @@ export type TaskListQuery = {
   sort: 'dueDate' | 'createdAt' | 'status';
   direction: 'asc' | 'desc';
 };
+
+export interface TaskResponse {
+  task: Task;
+}
+
+export interface TaskListResponse {
+  tasks: Task[];
+}

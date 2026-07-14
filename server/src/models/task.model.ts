@@ -1,20 +1,11 @@
 import { Schema, model, type HydratedDocument } from 'mongoose';
 
-import { TASK_STATUSES, type TaskStatus } from '../constants/task.constants';
+import { TASK_STATUSES } from '../constants/task.constants';
+import type { TaskRecord } from '../types/task.types';
 
-interface Task {
-  title: string;
-  description?: string;
-  status: TaskStatus;
-  dueDate: Date;
-  ownerId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+export type TaskDocument = HydratedDocument<TaskRecord>;
 
-export type TaskDocument = HydratedDocument<Task>;
-
-const taskSchema = new Schema<Task>(
+const taskSchema = new Schema<TaskRecord>(
   {
     title: { type: String, required: true, trim: true, maxlength: 120 },
     description: { type: String, trim: true, maxlength: 1_000 },
@@ -27,4 +18,4 @@ const taskSchema = new Schema<Task>(
 
 taskSchema.index({ ownerId: 1, dueDate: 1 });
 
-export const TaskModel = model<Task>('Task', taskSchema);
+export const TaskModel = model<TaskRecord>('Task', taskSchema);

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
+import { readApiError } from '../core/api/api-error.model';
 import { AuthService } from './auth.service';
 
 @Component({
@@ -33,13 +34,13 @@ export class LoginComponent {
     this.errorMessage.set('');
     const { username, password } = this.form.getRawValue();
 
-    this.auth.login(username, password).subscribe({
+    this.auth.login({ username, password }).subscribe({
       next: () => {
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
         void this.router.navigateByUrl(returnUrl?.startsWith('/') ? returnUrl : '/tasks');
       },
-      error: (error: { error?: { message?: string } }) => {
-        this.errorMessage.set(error.error?.message ?? 'Sign in could not be completed. Try again.');
+      error: (error: unknown) => {
+        this.errorMessage.set(readApiError(error).message ?? 'Sign in could not be completed. Try again.');
         this.isSubmitting.set(false);
       },
     });

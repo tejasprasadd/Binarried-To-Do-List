@@ -4,11 +4,7 @@ import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 
 import { API_BASE_URL } from '../core/api/api.config';
-
-type LoginResponse = {
-  isLoggedIn: boolean;
-  username: string;
-};
+import type { LoginCredentials, LoginResponse } from './auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -20,9 +16,9 @@ export class AuthService {
 
   readonly isLoggedIn = this.loggedIn.asReadonly();
 
-  login(username: string, password: string): Observable<LoginResponse> {
+  login(credentials: LoginCredentials): Observable<LoginResponse> {
     return this.http
-      .post<LoginResponse>(`${this.apiBaseUrl}/login`, { username, password })
+      .post<LoginResponse>(`${this.apiBaseUrl}/login`, credentials)
       .pipe(tap((response) => this.setLoggedIn(response.isLoggedIn)));
   }
 
