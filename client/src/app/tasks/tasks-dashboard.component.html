@@ -1,4 +1,4 @@
-<main class="min-h-dvh bg-canvas px-4 py-6 sm:px-7 sm:py-10 lg:px-12">
+<main class="daybook-shell min-h-dvh px-4 py-6 sm:px-7 sm:py-10 lg:px-12">
   <div class="mx-auto max-w-6xl">
     <header class="flex flex-wrap items-center justify-between gap-4 border-b border-line pb-6">
       <a routerLink="/tasks" class="font-mono text-sm font-bold tracking-[0.12em] text-ink">BINARIED<span class="text-lilac-strong">.</span></a>
@@ -8,7 +8,7 @@
     <section class="mt-8 flex flex-col justify-between gap-6 sm:mt-12 sm:flex-row sm:items-end">
       <div>
         <p class="font-mono text-xs uppercase tracking-[0.18em] text-muted">Your daybook</p>
-        <h1 class="mt-2 text-4xl font-black tracking-[-0.06em] text-ink sm:text-5xl">Things to finish.</h1>
+        <h1 class="daybook-title mt-2 text-5xl text-ink sm:text-6xl">Things to finish.</h1>
         <p class="mt-3 max-w-lg text-muted">A short list is a useful list. Give each task a due date, then make the next move.</p>
       </div>
       <a routerLink="/tasks/new" class="inline-flex items-center justify-center rounded-xl bg-ink px-5 py-3 font-bold text-white transition hover:bg-lilac-strong">Add task <span class="ml-2 text-xl leading-none" aria-hidden="true">+</span></a>
@@ -41,7 +41,7 @@
     } @else {
       <ol class="mt-8 grid gap-4" aria-label="Tasks">
         @for (task of tasks(); track task.id) {
-          <li class="group grid gap-4 rounded-2xl border border-line bg-surface p-5 transition hover:border-lilac-strong sm:grid-cols-[7.5rem_1fr_auto] sm:items-start">
+          <li class="task-card group grid gap-4 rounded-2xl border border-line bg-surface p-5 pl-6 transition hover:border-lilac-strong sm:grid-cols-[7.5rem_1fr_auto] sm:items-start" [attr.data-status]="task.status">
             <div class="font-mono text-sm"><p [class.text-red-700]="isOverdue(task)" class="font-bold text-ink">{{ task.dueDate | date:'MMM d' }}</p><p class="mt-1 text-xs text-muted">{{ isOverdue(task) ? 'OVERDUE' : 'DUE' }}</p></div>
             <div class="min-w-0"><div class="flex flex-wrap items-center gap-2"><h2 class="break-words text-lg font-black tracking-[-0.025em] text-ink">{{ task.title }}</h2><span class="rounded-full px-2.5 py-1 text-xs font-bold" [class.bg-mint]="task.status === 'done'" [class.bg-lilac]="task.status === 'in-progress'" [class.bg-canvas]="task.status === 'todo'">{{ statusLabel(task.status) }}</span></div>@if (task.description) { <p class="mt-2 whitespace-pre-wrap break-words text-sm leading-6 text-muted">{{ task.description }}</p> }</div>
             <div class="flex gap-2 sm:justify-end"><a [routerLink]="['/tasks', task.id, 'edit']" class="rounded-lg px-3 py-2 text-sm font-bold text-ink hover:bg-lilac">Edit</a><button type="button" (click)="deleteTask(task)" [disabled]="isDeleting() === task.id" class="rounded-lg px-3 py-2 text-sm font-bold text-red-700 hover:bg-red-50 disabled:opacity-50">{{ isDeleting() === task.id ? 'Deleting…' : 'Delete' }}</button></div>

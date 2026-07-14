@@ -13,6 +13,7 @@
   --color-mint-strong: #13795b;
   --font-sans: "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-display: Iowan Old Style, Palatino Linotype, Book Antiqua, Georgia, serif;
 }
 
 @layer base {
@@ -50,5 +51,63 @@
   :focus-visible {
     outline: 3px solid color-mix(in srgb, var(--color-lilac-strong) 72%, white);
     outline-offset: 3px;
+  }
+}
+
+@layer components {
+  .daybook-shell {
+    background:
+      radial-gradient(circle at 94% 4%, color-mix(in srgb, var(--color-lilac) 72%, transparent) 0 9rem, transparent 24rem),
+      radial-gradient(circle at 6% 94%, color-mix(in srgb, var(--color-mint) 55%, transparent) 0 8rem, transparent 22rem),
+      var(--color-canvas);
+  }
+
+  .daybook-title {
+    font-family: var(--font-display) !important;
+    font-weight: 400 !important;
+    letter-spacing: -0.045em;
+  }
+
+  .task-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .task-card::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 0.35rem;
+    content: '';
+    background: var(--color-line);
+  }
+
+  .task-card[data-status='in-progress']::before {
+    background: var(--color-lilac-strong);
+  }
+
+  .task-card[data-status='done']::before {
+    background: var(--color-mint-strong);
+  }
+
+  .task-card:hover {
+    box-shadow: 0 12px 28px rgb(32 35 63 / 8%);
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .task-card:hover {
+    transform: none;
   }
 }
