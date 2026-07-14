@@ -1,3 +1,53 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+@theme {
+  --color-canvas: #f7f7fc;
+  --color-surface: #ffffff;
+  --color-ink: #20233f;
+  --color-muted: #68708f;
+  --color-line: #e2e5f0;
+  --color-lilac: #e7e3ff;
+  --color-lilac-strong: #6f5ce7;
+  --color-mint: #b8f0d6;
+  --color-mint-strong: #13795b;
+  --font-sans: "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    min-width: 320px;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+  }
+
+  body {
+    min-width: 320px;
+    min-height: 100dvh;
+    margin: 0;
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  button,
+  [role='button'],
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--color-lilac-strong) 72%, white);
+    outline-offset: 3px;
+  }
+}
