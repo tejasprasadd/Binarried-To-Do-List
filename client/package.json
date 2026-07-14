@@ -7,10 +7,11 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "serve:ssr:client": "node dist/client/server/server.mjs"
   },
   "private": true,
-  "packageManager": "npm@11.16.0",
+  "packageManager": "bun@1.2.0",
   "dependencies": {
     "@angular/common": "^22.0.0",
     "@angular/compiler": "^22.0.0",
