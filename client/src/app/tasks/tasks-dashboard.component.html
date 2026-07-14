@@ -1,0 +1,53 @@
+<main class="min-h-dvh bg-canvas px-4 py-6 sm:px-7 sm:py-10 lg:px-12">
+  <div class="mx-auto max-w-6xl">
+    <header class="flex flex-wrap items-center justify-between gap-4 border-b border-line pb-6">
+      <a routerLink="/tasks" class="font-mono text-sm font-bold tracking-[0.12em] text-ink">BINARIED<span class="text-lilac-strong">.</span></a>
+      <button type="button" (click)="logout()" class="rounded-lg px-3 py-2 text-sm font-bold text-muted hover:bg-lilac hover:text-ink">Sign out</button>
+    </header>
+
+    <section class="mt-8 flex flex-col justify-between gap-6 sm:mt-12 sm:flex-row sm:items-end">
+      <div>
+        <p class="font-mono text-xs uppercase tracking-[0.18em] text-muted">Your daybook</p>
+        <h1 class="mt-2 text-4xl font-black tracking-[-0.06em] text-ink sm:text-5xl">Things to finish.</h1>
+        <p class="mt-3 max-w-lg text-muted">A short list is a useful list. Give each task a due date, then make the next move.</p>
+      </div>
+      <a routerLink="/tasks/new" class="inline-flex items-center justify-center rounded-xl bg-ink px-5 py-3 font-bold text-white transition hover:bg-lilac-strong">Add task <span class="ml-2 text-xl leading-none" aria-hidden="true">+</span></a>
+    </section>
+
+    <section class="mt-8 grid gap-3 rounded-2xl border border-line bg-surface p-3 sm:grid-cols-3 sm:p-4" aria-label="Task display controls">
+      <label class="grid gap-1.5 px-2 text-sm font-bold text-ink">Status
+        <select [value]="query().status" (change)="updateQuery({ status: $any($event.target).value })" class="rounded-lg bg-canvas px-3 py-2 font-medium text-ink outline-none">
+          <option value="all">All tasks</option><option value="todo">To do</option><option value="in-progress">In progress</option><option value="done">Done</option>
+        </select>
+      </label>
+      <label class="grid gap-1.5 px-2 text-sm font-bold text-ink">Sort by
+        <select [value]="query().sort" (change)="updateQuery({ sort: $any($event.target).value })" class="rounded-lg bg-canvas px-3 py-2 font-medium text-ink outline-none">
+          <option value="dueDate">Due date</option><option value="createdAt">Created date</option><option value="status">Status</option>
+        </select>
+      </label>
+      <label class="grid gap-1.5 px-2 text-sm font-bold text-ink">Direction
+        <select [value]="query().direction" (change)="updateQuery({ direction: $any($event.target).value })" class="rounded-lg bg-canvas px-3 py-2 font-medium text-ink outline-none">
+          <option value="asc">Earliest first</option><option value="desc">Latest first</option>
+        </select>
+      </label>
+    </section>
+
+    @if (isLoading()) {
+      <p class="py-16 text-center font-mono text-sm text-muted" role="status">Loading your tasks…</p>
+    } @else if (errorMessage()) {
+      <section class="mt-8 rounded-2xl border border-red-200 bg-red-50 p-6 text-red-900" role="alert"><p class="font-bold">Tasks are unavailable</p><p class="mt-1">{{ errorMessage() }}</p><button type="button" (click)="retry()" class="mt-4 rounded-lg bg-red-800 px-4 py-2 font-bold text-white">Try again</button></section>
+    } @else if (tasks().length === 0) {
+      <section class="mt-8 rounded-[2rem] border border-dashed border-line bg-surface px-6 py-16 text-center"><p class="font-mono text-xs uppercase tracking-[0.18em] text-muted">Clear page</p><h2 class="mt-3 text-2xl font-black tracking-[-0.04em] text-ink">No tasks here yet.</h2><p class="mx-auto mt-3 max-w-sm text-muted">Add the first thing you want to make visible.</p><a routerLink="/tasks/new" class="mt-6 inline-flex rounded-xl bg-ink px-5 py-3 font-bold text-white">Add your first task</a></section>
+    } @else {
+      <ol class="mt-8 grid gap-4" aria-label="Tasks">
+        @for (task of tasks(); track task.id) {
+          <li class="group grid gap-4 rounded-2xl border border-line bg-surface p-5 transition hover:border-lilac-strong sm:grid-cols-[7.5rem_1fr_auto] sm:items-start">
+            <div class="font-mono text-sm"><p [class.text-red-700]="isOverdue(task)" class="font-bold text-ink">{{ task.dueDate | date:'MMM d' }}</p><p class="mt-1 text-xs text-muted">{{ isOverdue(task) ? 'OVERDUE' : 'DUE' }}</p></div>
+            <div class="min-w-0"><div class="flex flex-wrap items-center gap-2"><h2 class="break-words text-lg font-black tracking-[-0.025em] text-ink">{{ task.title }}</h2><span class="rounded-full px-2.5 py-1 text-xs font-bold" [class.bg-mint]="task.status === 'done'" [class.bg-lilac]="task.status === 'in-progress'" [class.bg-canvas]="task.status === 'todo'">{{ statusLabel(task.status) }}</span></div>@if (task.description) { <p class="mt-2 whitespace-pre-wrap break-words text-sm leading-6 text-muted">{{ task.description }}</p> }</div>
+            <div class="flex gap-2 sm:justify-end"><a [routerLink]="['/tasks', task.id, 'edit']" class="rounded-lg px-3 py-2 text-sm font-bold text-ink hover:bg-lilac">Edit</a><button type="button" (click)="deleteTask(task)" [disabled]="isDeleting() === task.id" class="rounded-lg px-3 py-2 text-sm font-bold text-red-700 hover:bg-red-50 disabled:opacity-50">{{ isDeleting() === task.id ? 'Deleting…' : 'Delete' }}</button></div>
+          </li>
+        }
+      </ol>
+    }
+  </div>
+</main>
