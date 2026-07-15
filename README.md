@@ -84,6 +84,9 @@ The API integration suite uses `binaried_test` by default and clears only that t
 
 The Compose service includes `GLIBC_TUNABLES=glibc.pthread.rseq=1`. This is required for the MongoDB 8 image on Linux kernel 6.19 and newer; without it, MongoDB exits during startup.
 
+Demo video: https://drive.google.com/file/d/112KsfkfvY-NEXMk4IDxgLuMw52OYd_hU/view?usp=sharing
+
+
 ## Deliberately out of scope
 
 This demo does not implement real registration, users, password hashing, sessions, JWTs, pagination, roles, automated browser E2E tests, CI/CD, or deployment. Authentication is strictly a local `isLoggedIn` flag paired with the hard-coded demo credential check.
