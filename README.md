@@ -54,6 +54,9 @@ The API listens on `http://localhost:3000` and the client is configured to call 
 
 ## Project Q&A
 
+Demo video: https://drive.google.com/file/d/112KsfkfvY-NEXMk4IDxgLuMw52OYd_hU/view?usp=sharing
+
+
 ### 1. How do I set up the project?
 
 **Answer:** Follow the setup instructions in this root [`README.md`](README.md), under [Run locally](#run-locally).
