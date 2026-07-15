@@ -13,7 +13,7 @@ const taskSchema = new Schema<TaskRecord>(
     dueDate: { type: Date, required: true },
     ownerId: { type: String, required: true, immutable: true, index: true },
   },
-  { timestamps: true },
+  { timestamps: true, versionKey: false },
 );
 
 taskSchema.index({ ownerId: 1, dueDate: 1 });
