@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 
-import { API_BASE_URL } from '../core/api/api.config';
-import type { LoginCredentials, LoginResponse } from './auth.model';
+import { API_BASE_URL } from '../../core/api/api.config';
+import type { LoginCredentials, LoginResponse } from '../auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

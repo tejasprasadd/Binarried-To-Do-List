@@ -3,10 +3,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { readApiError } from '../core/api/api-error.model';
-import { ToastService } from '../shared/toast/toast.service';
-import { TaskInput } from './task.model';
-import { TaskService } from './task.service';
+import { readApiError } from '../../core/api/api-error.model';
+import { ToastService } from '../../shared/toast/services/toast.service';
+import { TaskInput } from '../task.model';
+import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-task-form',

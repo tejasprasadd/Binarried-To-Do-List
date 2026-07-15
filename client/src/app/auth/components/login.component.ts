@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { readApiError } from '../core/api/api-error.model';
-import { ToastService } from '../shared/toast/toast.service';
-import { AuthService } from './auth.service';
+import { readApiError } from '../../core/api/api-error.model';
+import { ToastService } from '../../shared/toast/services/toast.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',

@@ -2,8 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { API_BASE_URL } from '../core/api/api.config';
-import type { TaskInput, TaskListQuery, TaskListResponse, TaskResponse } from './task.model';
+import { API_BASE_URL } from '../../core/api/api.config';
+import type { TaskInput, TaskListQuery, TaskListResponse, TaskResponse } from '../task.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {

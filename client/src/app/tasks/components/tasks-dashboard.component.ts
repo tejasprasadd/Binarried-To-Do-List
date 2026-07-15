@@ -3,10 +3,10 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { AuthService } from '../auth/auth.service';
-import { ToastService } from '../shared/toast/toast.service';
-import { Task, TaskListQuery, TaskStatus } from './task.model';
-import { TaskService } from './task.service';
+import { AuthService } from '../../auth/services/auth.service';
+import { ToastService } from '../../shared/toast/services/toast.service';
+import { Task, TaskListQuery, TaskStatus } from '../task.model';
+import { TaskService } from '../services/task.service';
 
 const DEFAULT_QUERY: TaskListQuery = { status: 'all', sort: 'dueDate', direction: 'asc' };
 
