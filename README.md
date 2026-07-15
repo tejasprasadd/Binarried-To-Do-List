@@ -52,6 +52,32 @@ Binaried is a small task manager built as a demo application. It pairs an Angula
 
 The API listens on `http://localhost:3000` and the client is configured to call `http://localhost:3000/api`.
 
+## Project Q&A
+
+### 1. How do I set up the project?
+
+**Answer:** Follow the setup instructions in this root [`README.md`](README.md), under [Run locally](#run-locally).
+
+### 2. Which AI tools did you use?
+
+**Answer:** I used the Codex CLI during development. I also got the opportunity to explore the GPT-5.6 model while building this.
+
+### 3. Where did AI help?
+
+**Answer:** AI helped me draft some initial test cases and gave me a few simple checks to try when the MongoDB connection was failing. I reviewed and adapted the suggestions for this project.
+
+### 4. What did you implement yourself?
+
+**Answer:** I implemented and connected the core task flow: creating, viewing, editing, filtering, and deleting tasks. I also wired the Angular client to the API, added basic input validation, and tested the task API flow.
+
+### 5. What challenges did you face?
+
+**Answer:** The main challenge was a version mismatch between Angular-related packages and the MongoDB setup. It caused connection and runtime problems that broke several parts of the application until the package versions and configuration were aligned.
+
+### If you had more time, what improvements would you make?
+
+**Answer:** I would add real user authentication, improve error messages, add more automated tests, and deploy the application so it can be used online. Add a clock with an alram feature that worked as a reminder and rang alarms to notify the user regarding the tasks. 
+
 ## Commands
 
 | Command | Purpose |
